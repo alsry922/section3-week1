@@ -1,30 +1,49 @@
 package com.codestates.coffee;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
-@RequestMapping(value = "v1/coffees", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(value = "v1/coffees")
 public class CoffeeController {
   @PostMapping
-  public String postCoffee(@RequestParam("korName") String korName,
-                           @RequestParam("engName") String engName,
-                           @RequestParam("price") int price) {
-    String response = "{" +
-            "\"korName\":" + "\"" + korName + "\"," +
-            "\"engName\":" + "\"" + engName + "\"," +
-            "\"price\":" + "\"" + price + "\"" +
-        "}";
-    return response;
+  public ResponseEntity postCoffee(@RequestParam("korName") String korName,
+                                   @RequestParam("engName") String engName,
+                                   @RequestParam("price") int price) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("korName", korName);
+    map.put("engName", engName);
+    map.put("price", price);
+    return new ResponseEntity<Map>(map, HttpStatus.CREATED);
+  }
+
+  @PatchMapping("/{coffee-id}")
+  public ResponseEntity patchCoffee(@PathVariable("coffee-id") long coffeeId,
+                                    @RequestBody CoffeePatchDto coffeePatchDto) {
+    coffeePatchDto.setPrice(6000);
+    return new ResponseEntity<>(coffeePatchDto, HttpStatus.OK);
   }
 
   @GetMapping("/{coffee-id}")
-  public String getCoffee(@PathVariable("coffee-id") long coffeeId) {
-    return null;
+  public ResponseEntity getCoffee(@PathVariable("coffee-id") long coffeeId) {
+    System.out.println("# coffeeId: " + coffeeId);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @GetMapping
-  public String getCoffees() {
-    return null;
+  public ResponseEntity getCoffees() {
+
+    System.out.println("# get coffees");
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @DeleteMapping({"/{coffee-id}"})
+  public ResponseEntity delteCoffee(@PathVariable("coffee-id") long coffeeId) {
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }
