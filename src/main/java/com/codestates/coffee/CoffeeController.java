@@ -14,9 +14,10 @@ public class CoffeeController {
             "\"korName\":" + "\"" + korName + "\"," +
             "\"engName\":" + "\"" + engName + "\"," +
             "\"price\":" + "\"" + price + "\"" +
-            "}";
+        "}";
     return response;
   }
+
   @GetMapping("/{coffee-id}")
   public String getCoffee(@PathVariable("coffee-id") long coffeeId) {
     return null;
